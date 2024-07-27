@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="my-4 text-center">Daftar Mahasiswa</h1>
+
+<form method="get" action="{{ url_for('students') }}" class="mb-4 d-flex justify-content-center">
+    <input type="text" name="search" placeholder="Cari mahasiswa..." value="{{ request.args.get('search', '') }}" class="form-control w-50 mr-2">
+    <button type="submit" class="btn btn-primary">Cari</button>
+</form>
+
+<div class="d-flex justify-content-center mb-4">
+    <a href="{{ url_for('add') }}" class="btn btn-success mr-2">Tambah Mahasiswa</a>
+</div>
+
+<table class="table table-striped w-75 mx-auto">
+    <thead>
+        <tr>
+            <th>NIM</th>
+            <th>Nama</th>
+            <th>Jurusan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students_grades %}
+        <tr>
+            <td>{{ student.NIM }}</td>
+            <td>{{ student.NAMA }}</td>
+            <td>{{ student.JURUSAN }}</td>
+            <td>{{ student.STATUS }}</td>
+            <td>
+                <a href="{{ url_for('view_grades', nim=student.NIM) }}" class="btn btn-info btn-sm">Lihat Nilai</a>
+                <form action="{{ url_for('delete', nim=student.NIM) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
