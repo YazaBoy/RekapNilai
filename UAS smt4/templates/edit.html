@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data Mahasiswa</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Mahasiswa</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="nim">NIM:</label>
+            <input type="text" class="form-control" id="nim" name="nim" value="{{ student.NIM }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nama">Nama:</label>
+            <input type="text" class="form-control" id="nama" name="nama" value="{{ student.NAMA }}">
+        </div>
+        <div class="form-group">
+            <label for="jurusan">Jurusan:</label>
+            <input type="text" class="form-control" id="jurusan" name="jurusan" value="{{ student.JURUSAN }}">
+        </div>
+        <div class="form-group">
+            <label for="tugas">Tugas:</label>
+            <input type="number" class="form-control" id="tugas" name="tugas" value="{{ student.TUGAS }}">
+        </div>
+        <div class="form-group">
+            <label for="uts">UTS:</label>
+            <input type="number" class="form-control" id="uts" name="uts" value="{{ student.UTS }}">
+        </div>
+        <div class="form-group">
+            <label for="uas">UAS:</label>
+            <input type="number" class="form-control" id="uas" name="uas" value="{{ student.UAS }}">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Simpan</button>
+    </form>
+</body>
+</html>

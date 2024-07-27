@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Mahasiswa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        a {
+            color: #5cb85c;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #5cb85c;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        a:hover {
+            background-color: #5cb85c;
+            color: white;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        form[method="post"] {
+            display: inline;
+        }
+        form[method="post"] button {
+            background-color: #d9534f;
+            margin-left: 10px;
+        }
+        form[method="post"] button:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daftar Mahasiswa</h1>
+
+    <form method="get" action="{{ url_for('students') }}">
+        <input type="text" name="search" placeholder="Cari mahasiswa..." value="{{ request.args.get('search', '') }}">
+        <button type="submit">Cari</button>
+    </form>
+
+    <a href="{{ url_for('add') }}">Tambah Mahasiswa</a>
+    <a href="{{ url_for('index') }}">Home</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>NIM</th>
+                <th>Nama</th>
+                <th>Jurusan</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students_grades %}
+            <tr>
+                <td>{{ student.NIM }}</td>
+                <td>{{ student.NAMA }}</td>
+                <td>{{ student.JURUSAN }}</td>
+                <td>{{ student.STATUS }}</td>
+                <td>
+                    <a href="{{ url_for('view_grades', nim=student.NIM) }}">Lihat Nilai</a>
+                    <form action="{{ url_for('delete', nim=student.NIM) }}" method="post">
+                        <button type="submit">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

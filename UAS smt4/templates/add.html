@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="my-4">Tambah Mahasiswa</h1>
+<form method="post" class="w-50 mx-auto">
+    <div class="form-group mb-3">
+        <label for="nim">NIM</label>
+        <input type="text" class="form-control" id="nim" name="nim" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="nama">Nama</label>
+        <input type="text" class="form-control" id="nama" name="nama" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="jurusan">Jurusan</label>
+        <input type="text" class="form-control" id="jurusan" name="jurusan" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="tugas">Tugas</label>
+        <input type="number" class="form-control" id="tugas" name="tugas" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="uts">UTS</label>
+        <input type="number" class="form-control" id="uts" name="uts" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="uas">UAS</label>
+        <input type="number" class="form-control" id="uas" name="uas" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Tambah Mahasiswa</button>
+</form>
+
+{% endblock %}
