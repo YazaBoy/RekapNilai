@@ -22,6 +22,7 @@ with app.app_context():
                 TUGAS INTEGER,
                 UTS INTEGER,
                 UAS INTEGER,
+                PRESENSI INTEGER,
                 TOTAL INTEGER,
                 RATA REAL,
                 STATUS TEXT,
@@ -79,18 +80,19 @@ def add():
         tugas = request.form['tugas']
         uts = request.form['uts']
         uas = request.form['uas']
+        presensi = request.form['presensi']
 
-        if not nim or not nama or not jurusan or not tugas or not uts or not uas:
+        if not nim or not nama or not jurusan or not tugas or not uts or not uas or not presensi:
             flash('Tolong masukkan data dengan benar!')
         else:
             conn = dbconnect()
             conn.execute('INSERT INTO mhs (NIM, NAMA, JURUSAN) VALUES (?, ?, ?)',
                          (nim, nama, jurusan))
-            total = int(tugas) + int(uts) + int(uas)
-            rata = total / 3
+            total = int(tugas) + int(uts) + int(uas) + int(presensi)
+            rata = total / 4
             status, grade = hitnilstat(rata)
-            conn.execute('INSERT INTO lnilai (NIM, TUGAS, UTS, UAS, TOTAL, RATA, STATUS, GRADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                         (nim, tugas, uts, uas, total, rata, status, grade))
+            conn.execute('INSERT INTO lnilai (NIM, TUGAS, UTS, UAS, PRESENSI, TOTAL, RATA, STATUS, GRADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (nim, tugas, uts, uas, presensi, total, rata, status, grade))
             conn.commit()
             conn.close()
             return redirect(url_for('students'))
@@ -128,7 +130,7 @@ def students():
 def view_grades(nim):
     conn = dbconnect()
     student = conn.execute('''
-        SELECT mhs.NIM, mhs.NAMA, mhs.JURUSAN, lnilai.TUGAS, lnilai.UTS, lnilai.UAS, lnilai.TOTAL, lnilai.RATA, lnilai.STATUS, lnilai.GRADE
+        SELECT mhs.NIM, mhs.NAMA, mhs.JURUSAN, lnilai.TUGAS, lnilai.UTS, lnilai.UAS, lnilai.PRESENSI, lnilai.TOTAL, lnilai.RATA, lnilai.STATUS, lnilai.GRADE
         FROM mhs
         LEFT JOIN lnilai ON mhs.NIM = lnilai.NIM
         WHERE mhs.NIM = ?
@@ -141,7 +143,7 @@ def view_grades(nim):
 def edit(nim):
     conn = dbconnect()
     student = conn.execute('''
-        SELECT mhs.NIM, mhs.NAMA, mhs.JURUSAN, lnilai.TUGAS, lnilai.UTS, lnilai.UAS, lnilai.TOTAL, lnilai.RATA, lnilai.STATUS, lnilai.GRADE
+        SELECT mhs.NIM, mhs.NAMA, mhs.JURUSAN, lnilai.TUGAS, lnilai.UTS, lnilai.UAS, lnilai.PRESENSI, lnilai.TOTAL, lnilai.RATA, lnilai.STATUS, lnilai.GRADE
         FROM mhs
         LEFT JOIN lnilai ON mhs.NIM = lnilai.NIM
         WHERE mhs.NIM = ?
@@ -153,12 +155,13 @@ def edit(nim):
         tugas = request.form['tugas']
         uts = request.form['uts']
         uas = request.form['uas']
+        presensi = request.form['presensi']
 
-        if not nama or not jurusan or not tugas or not uts or not uas:
+        if not nama or not jurusan or not tugas or not uts or not uas or not presensi:
             flash('Please fill in all fields!')
         else:
-            total = int(tugas) + int(uts) + int(uas)
-            rata = total / 3
+            total = int(tugas) + int(uts) + int(uas) + int(presensi)  # Include presensi in total
+            rata = total / 4  # Calculate rata-rata including presensi
             status, grade = hitnilstat(rata)
 
             conn.execute('UPDATE mhs SET NAMA = ?, JURUSAN = ? WHERE NIM = ?',
@@ -166,14 +169,14 @@ def edit(nim):
             existing_record = conn.execute('SELECT * FROM lnilai WHERE NIM = ?', (nim,)).fetchone()
             if existing_record:
                 conn.execute('''
-                    UPDATE lnilai SET TUGAS = ?, UTS = ?, UAS = ?, TOTAL = ?, RATA = ?, STATUS = ?, GRADE = ?
+                    UPDATE lnilai SET TUGAS = ?, UTS = ?, UAS = ?, PRESENSI = ?, TOTAL = ?, RATA = ?, STATUS = ?, GRADE = ?
                     WHERE NIM = ?
-                ''', (tugas, uts, uas, total, rata, status, grade, nim))
+                ''', (tugas, uts, uas, presensi, total, rata, status, grade, nim))
             else:
                 conn.execute('''
-                    INSERT INTO lnilai (NIM, TUGAS, UTS, UAS, TOTAL, RATA, STATUS, GRADE)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (nim, tugas, uts, uas, total, rata, status, grade))
+                    INSERT INTO lnilai (NIM, TUGAS, UTS, UAS, PRESENSI, TOTAL, RATA, STATUS, GRADE)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (nim, tugas, uts, uas, presensi, total, rata, status, grade))
             conn.commit()
             conn.close()
             return redirect(url_for('view_grades', nim=nim))
